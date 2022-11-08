@@ -6,8 +6,8 @@ const cors = require("cors");
 
 const db = mysql.createPool({
     host: "localhost",
-    user: "pul",
-    password: "admin",
+    user: "phin",
+    password: "Philline011*",
     database: "crud_express"
 });
 
@@ -22,6 +22,14 @@ app.get("/api/get", (req, res) => {
     });
 });
 
+app.delete("/api/delete/:id", (req, res) => {
+    const {id} = req.params
+    const sqlDelete = "DELETE FROM contact_db where id = ?";
+    db.query(sqlDelete, id, (err, result) => {
+        if(err) console.log(err)
+    });
+});
+
 app.post("/api/post", (req, res) => {
     const {name, email, contact} = req.body;
     const sqlInsert = "INSERT INTO contact_db (name, email, contact) VALUES (?, ? ,?)"
@@ -32,6 +40,17 @@ app.post("/api/post", (req, res) => {
     });
 });
 
-app.listen(3000, () => {
+app.put("/api/update/:id", (req, res) => {
+    const {id} = req.params
+    const {name, email, contact} = req.body;
+    const sqlUpdate = "UPDATE contact_db SET name = ?, email = ?, contact = ? where id = ?"
+    db.query(sqlUpdate, [name, email, contact, id], (err, result)=> {
+        if(err){
+            console.log(err)
+        }
+    });
+});
+
+app.listen(5000, () => {
     console.log("Server is running");
 });

@@ -8,6 +8,13 @@ const Home = () => {
     const [data, setData] = useState([]);
     const [openCreate, setOpenCreate] = useState(false);
 
+    const [id, setID] = useState(null)
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [contact, setContact] = useState("");
+
+    const [action, setAction] = useState("")
+
     const handleOpenCreate = () => {
         setOpenCreate(true)
     }
@@ -21,6 +28,19 @@ const Home = () => {
         loadData();
     }, []);
 
+    const handleEdit = (item) => {
+        setID(item.id)
+        setName(item.name)
+        setEmail(item.email)
+        setContact(item.contact)
+        setOpenCreate(true)
+    }
+
+    const handleDelete = (id) => {
+        axios.delete(`http://localhost:5000/api/delete/${id}`);
+        setTimeout(() => loadData(),500);
+    }
+
     return (
         <div style={{marginTop: "150px"}}>
             <table className="styled-table">
@@ -30,6 +50,7 @@ const Home = () => {
                         <th style={{textAlign: "center"}}>Unsa nimo Name</th>
                         <th style={{textAlign: "center"}}>Email address</th>
                         <th style={{textAlign: "center"}}>Contact</th>
+                        <th style={{textAlign: "center"}}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,6 +61,16 @@ const Home = () => {
                                 <td>{item.name}</td>
                                 <td>{item.email}</td>
                                 <td>{item.contact}</td>
+                                <td>
+                                    <div>
+                                        <button
+                                            onClick={() => {
+                                                setAction("edit")
+                                                handleEdit(item)
+                                            }}>Edit</button>
+                                        <button onClick={ () => {handleDelete(item.id)}}>Delete</button>
+                                    </div>
+                                </td>
                             </tr>
                         )
                     })}
@@ -47,12 +78,15 @@ const Home = () => {
             </table>
             <Button variant="contained" 
                     style={{marginTop: '10px'}} 
-                    onClick={handleOpenCreate}>
+                    onClick={()=>{
+                        setAction("add")
+                        handleOpenCreate()
+                    }}>
                         Waray pa account? Register na diri
             </Button>
             <Grid>
                 <Dialog open={openCreate}>
-                    <AddAccount setOpenCreate={setOpenCreate}/>
+                    <AddAccount setOpenCreate={setOpenCreate} id={id} name={name} email={email} contact={contact} action={action}/>
                 </Dialog>
             </Grid>
         </div>
