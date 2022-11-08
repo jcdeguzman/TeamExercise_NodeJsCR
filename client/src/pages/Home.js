@@ -19,6 +19,13 @@ const Home = () => {
         setOpenCreate(true)
     }
 
+    const resetValues = () => {
+        setName("");
+        setEmail("");
+        setContact("");
+        setID(null);
+    }
+
     const loadData = async () => {
         const response = await axios.get("http://localhost:5000/api/get");
         setData(response.data);
@@ -80,6 +87,7 @@ const Home = () => {
                     style={{marginTop: '10px'}} 
                     onClick={()=>{
                         setAction("add")
+                        resetValues()
                         handleOpenCreate()
                     }}>
                         Waray pa account? Register na diri

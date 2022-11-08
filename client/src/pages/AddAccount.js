@@ -13,8 +13,7 @@ const initialState = {
 }
 
 const AddAccount = (props) => {
-    // const {setOpenCreate} = props.setOpenCreate
-    // const [openCreate, setOpenCreate] = useState(props.setOpenCreate)
+    const {setOpenCreate} = props
     const [state, setState] = useState(initialState);
     const [id, setID] = useState(props.id)
     const [name, setName] = useState(props.name);
@@ -24,8 +23,7 @@ const AddAccount = (props) => {
     const navigate = useNavigate()
 
     const handleCloseCreate = () => {
-        setTimeout(() => navigate("/"));
-        window.location.reload();
+        setOpenCreate(false)
     }
 
     const handleSubmit = e => {
@@ -51,15 +49,10 @@ const AddAccount = (props) => {
                     setState({name: "", email: "", contact: ""});
                 }).catch((err) => toast.error(err.response.data));;
             }
-            
+            setOpenCreate(false)
             setTimeout(() => navigate("/"));
             window.location.reload();
         }
-    };
-
-    const handleInputChange = e => {
-        const {name, value} = e.target
-        setState({...state, [name]: value});
     };
 
     return(
